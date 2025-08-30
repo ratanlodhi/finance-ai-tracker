@@ -111,7 +111,7 @@ const LoginPage: React.FC = () => {
               </Button>
 
               <div className="text-center text-sm text-gray-500">
-                <p>Demo Mode - No real Google account needed</p>
+                <p>Google account needed</p>
                 <p className="mt-1">Click to explore with sample data</p>
               </div>
             </CardContent>

@@ -15,10 +15,14 @@ const TransactionInput: React.FC = () => {
   const [isConfirming, setIsConfirming] = useState(false);
 
   const examples = [
-    "Coffee at Starbucks $6.50",
-    "Gas station $40",
-    "Monthly salary $4500",
-    "Grocery shopping $120"
+"Coffee at Starbucks $6.50",
+"Gas station $40",
+"Amazon purchase $89.99",
+"Monthly salary $4500",
+ "Dinner at Italian restaurant $65",
+ "Netflix subscription $15.99",
+ "Grocery shopping at Whole Foods $120",
+ "Uber ride to airport $28"
   ];
 
   const handleParse = async () => {
@@ -33,21 +37,25 @@ const TransactionInput: React.FC = () => {
     }
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!parsedData) return;
 
-    addTransaction({
-      amount: parsedData.amount,
-      description: parsedData.description,
-      category: parsedData.category,
-      type: parsedData.type,
-      date: new Date().toISOString().split('T')[0]
-    });
+    try {
+      await addTransaction({
+        amount: parsedData.amount,
+        description: parsedData.description,
+        category: parsedData.category,
+        type: parsedData.type,
+        date: new Date().toISOString().split('T')[0]
+      });
 
-    // Reset form
-    setInput('');
-    setParsedData(null);
-    setIsConfirming(false);
+      // Reset form only after successful add
+      setInput('');
+      setParsedData(null);
+      setIsConfirming(false);
+    } catch (error) {
+      console.error('Failed to add transaction:', error);
+    }
   };
 
   const handleCancel = () => {
@@ -90,7 +98,7 @@ const TransactionInput: React.FC = () => {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Describe your transaction in natural language..."
                   className="flex-1 h-12 text-base"
-                  onKeyPress={(e) => e.key === 'Enter' && !loading && handleParse()}
+                  onKeyDown={(e) => e.key === 'Enter' && !loading && handleParse()}
                   disabled={loading}
                 />
                 <Button
@@ -145,11 +153,13 @@ const TransactionInput: React.FC = () => {
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Type</label>
-                  <Badge 
-                    variant={parsedData!.type === 'income' ? 'default' : 'secondary'}
-                    className={parsedData!.type === 'income' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}
+                  <Badge
+                    variant={parsedData && parsedData.type === 'income' ? 'default' : 'secondary'}
+                    className={parsedData && parsedData.type === 'income' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}
                   >
-                    {parsedData!.type.charAt(0).toUpperCase() + parsedData!.type.slice(1)}
+                  {parsedData && parsedData.type
+                    ? parsedData.type.charAt(0).toUpperCase() + parsedData.type.slice(1)
+                    : 'Unknown'}
                   </Badge>
                 </div>
               </div>

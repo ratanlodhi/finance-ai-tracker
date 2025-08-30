@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import SummaryCards from '@/components/dashboard/SummaryCards';
 import SpendingChart from '@/components/dashboard/SpendingChart';
 import TrendChart from '@/components/dashboard/TrendChart';
+import TransactionInsightsChart from '@/components/dashboard/TransactionInsightsChart';
 import TransactionInput from '@/components/transactions/TransactionInput';
 import TransactionList from '@/components/transactions/TransactionList';
 
@@ -76,9 +77,12 @@ const Dashboard: React.FC = () => {
           <TransactionInput />
 
           {/* Charts Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <SpendingChart />
-            <TrendChart />
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <SpendingChart />
+              <TrendChart />
+            </div>
+            <TransactionInsightsChart />
           </div>
 
           {/* Transaction History */}
